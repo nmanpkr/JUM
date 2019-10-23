@@ -1,6 +1,6 @@
-package JUM.Graphics;
+package com.livinglifez.jum.graphics;
 
-import JUM.JUM;
+import com.livinglifez.jum.JUM;
 
 import javax.swing.*;
 import java.awt.*;
@@ -12,10 +12,15 @@ public class GUI extends JFrame {
     private JUM jum;
     private JUMPanel panel;
 
+    /**
+     * Creates the gui and sets reference to JUM object.
+     * @param jum
+     */
+
     public GUI(JUM jum){
         this.jum = jum;
 
-        setTitle("JUM.JUM library atom example");
+        setTitle("JUM library atom example");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(640,640));
 

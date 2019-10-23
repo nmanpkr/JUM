@@ -1,14 +1,13 @@
-package JUM;
+package com.livinglifez.jum;
 
-import JUM.Atom.*;
-import JUM.Graphics.GUI;
-import JUM.Particles.Particle;
+import com.livinglifez.jum.atom.*;
+import com.livinglifez.jum.graphics.GUI;
+import com.livinglifez.jum.particles.Particle;
 
 import java.util.ArrayList;
 
 /**
  * RUM created by Noah Schweibinz
- * Params: int Dimensions, long particles
  */
 
 public class JUM implements Runnable{
@@ -42,7 +41,7 @@ public class JUM implements Runnable{
                 name = elemName[i - 1];
             }
 
-            atoms.add(AtomFactory.creatAtom(name, i, 0, i));
+            atoms.add(AtomFactory.createAtom(name, i, 0, i));
         }
 
     }

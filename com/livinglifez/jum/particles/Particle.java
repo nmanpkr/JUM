@@ -1,4 +1,4 @@
-package JUM.Particles;
+package com.livinglifez.jum.particles;
 
 public class Particle {
 
@@ -8,6 +8,12 @@ public class Particle {
     public static final double ELECTRON_MASS = 0.000548597;
 
     private int type;
+
+    /**
+     * Parent class used to create particles.
+     * the basic atomic particles extend this class.
+     * @param type
+     */
 
     public Particle(int type){
         this.type = type;

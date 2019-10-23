@@ -1,6 +1,6 @@
-package JUM.Atom;
+package com.livinglifez.jum.atom;
 
-import JUM.Particles.Electron;
+import com.livinglifez.jum.particles.Electron;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,6 +11,12 @@ public class Shells {
     private ArrayList<Electron> electronsArray;
     private String notation;
 
+    /**
+     * This class is responsible for holding information about an atoms
+     * electron configuration, as well as generating the electron configuration notation.
+     * @param electrons
+     */
+
     public Shells(ArrayList<Electron> electrons){
 
         shells = new ArrayList<>();
@@ -20,13 +26,36 @@ public class Shells {
         fillShells();
     }
 
+
+    /**
+     * Returns the last shell in the shell array.
+     * @return
+     */
+
     private int getCurrentShell(){
         return shells.size() - 1;
     }
 
+    /**
+     * Given a sub-shell (zero-indexed) returns the amount of
+     * electrons that sub-shell can hold. Can be thought of as
+     * an orbital type max capacity.
+     *
+     * @param sub
+     * @return
+     */
+
     private static int subShellMax(int sub){
         return (4*sub) + 2;
     }
+
+    /**
+     * Given shell index (one-indexed) returns number of
+     * sub-shells for the shell
+     *
+     * @param shell
+     * @return
+     */
 
     private static int getSubShells(int shell){
         if(shell <= 0)
@@ -35,9 +64,24 @@ public class Shells {
         return shell;
     }
 
+    /**
+     * Returns the shells ArrayList.
+     * @return
+     */
+
     public ArrayList<ArrayList<ArrayList<Electron>>> getShells() {
         return shells;
     }
+
+    /**
+     * Given a shell and sub-shell returns the correct lettering and amount
+     * of electrons as param electrons.
+     *
+     * @param shell
+     * @param subshell
+     * @param electrons
+     * @return
+     */
 
     private static String getNotation(int shell, int subshell, int electrons){
         char[] shellLetters = new char[]{'K','L','M','N','O','P','Q'};
@@ -56,6 +100,12 @@ public class Shells {
 
         return notation;
     }
+
+    /**
+     *  This method handles putting electrons from electronsArray into the correct shells.
+     *  This method follows the Aufbau principle. It also generates the electron configuration as it
+     *  is filling the shells.
+     */
 
     private void fillShells(){
 
@@ -171,6 +221,11 @@ public class Shells {
 
     }
 
+    /**
+     * Attempts to stabilize atom by trying to either completely fill
+     * parent shell or half fill it.
+     */
+
     public void stabilize(){
         //loop through sub shells
         //see if we can get half/full or full
@@ -192,6 +247,13 @@ public class Shells {
                     if(shells.size() > (shellIndex + 1)) {
                         subshell.add(shells.get(shellIndex + 1).get(0).get(1));
                         shells.get(shellIndex + 1).get(0).remove(1);
+
+                        if(subshell.size() + 1 == subShellMax(subIndex)){
+                            subshell.get(subshell.size() - 1).setSpin(0.5);
+                        }else{
+                            subshell.get(subshell.size() - 1).setSpin(-0.5);
+                        }
+
                     }
                 }
             }
@@ -200,6 +262,11 @@ public class Shells {
 
     }
 
+    /**
+     * Adds more electrons to the atom then refills shells.
+     * @param electrons
+     */
+
     public void fill(Electron[] electrons){
         for(Electron e : electrons){
             this.electronsArray.add(e);
@@ -207,15 +274,32 @@ public class Shells {
         fillShells();
     }
 
+    /**
+     * Add one electron to atom then refill shells.
+     * @param e
+     */
+
     public void fill(Electron e){
         electronsArray.add(e);
         fillShells();
     }
 
+    /**
+     * Remove a specific electron from the atom.
+     * After removed the atom will refill shells.
+     * @param e
+     */
+
     public void removeElectron(Electron e){
         electronsArray.remove(e);
         fillShells();
     }
+
+    /**
+     * Removes a group of electrons from atom, then refills
+     * shells.
+     * @param electrons
+     */
 
     public void removeElectrons(Electron[] electrons){
         for(Electron e : electrons){
@@ -224,6 +308,10 @@ public class Shells {
         fillShells();
     }
 
+    /**
+     * Returns electrons in the outermost shell.
+     * @return
+     */
 
     public Electron[] getValence(){
         ArrayList<Electron> valence = new ArrayList<>();
@@ -236,6 +324,12 @@ public class Shells {
 
         return valence.toArray(new Electron[valence.size()]);
     }
+
+    /**
+     * Calculates electron configuration, note order is given in
+     * the order of left most shell to right most shell.
+     * @return
+     */
 
     public String getElectronConfigurationU(){
         String note = "";
@@ -257,13 +351,18 @@ public class Shells {
         return note.trim();
     }
 
+    /**
+     * Returns the electron configuration created when the shells were filled.
+     * @return
+     */
+
     public String getElectronConfiguration(){
         return notation.trim();
     }
 
     @Override
     public String toString(){
-        return "JUM.Atom.Shells: " + shells.size() + " Notation: " + getElectronConfiguration();
+        return "Shells: " + shells.size() + " Notation: " + getElectronConfiguration();
     }
 
 }

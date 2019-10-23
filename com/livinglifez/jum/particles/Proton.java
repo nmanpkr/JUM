@@ -1,4 +1,4 @@
-package JUM.Particles;
+package com.livinglifez.jum.particles;
 
 public class Proton extends Particle {
 

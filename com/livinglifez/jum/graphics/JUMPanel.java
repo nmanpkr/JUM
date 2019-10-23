@@ -1,9 +1,9 @@
-package JUM.Graphics;
+package com.livinglifez.jum.graphics;
 
-import JUM.JUM;
-import JUM.Atom.*;
-import JUM.Particles.Electron;
-import JUM.Particles.Proton;
+import com.livinglifez.jum.JUM;
+import com.livinglifez.jum.atom.*;
+import com.livinglifez.jum.particles.Electron;
+import com.livinglifez.jum.particles.Proton;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,6 +16,10 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * JUM Panel component used to draw atoms to screen and other important information.
+ * In the future this will be renamed to something else as more panels are made.
+ */
 
 public class JUMPanel extends JPanel implements ActionListener, MouseListener {
 
@@ -42,6 +46,15 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
 
     //Jum Object
     private JUM jum;
+
+    /**
+     * Instantiate the JUMPanel, width and height are arbitrary and are only used to
+     * correctly declare our buffered image. One resize these settings will be overwritten.
+     *
+     * @param width
+     * @param height
+     *
+     */
 
     public JUMPanel(int width, int height)
     {
@@ -73,13 +86,30 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
 
     }
 
+    /**
+     * Called to correct buffered images dimensions on frame resize.
+     */
+
     public void resize(){
         buffImage = new BufferedImage(getWidth(), getHeight(), BufferedImage.TYPE_INT_RGB);
     }
 
+    /**
+     * Sets the reference for our main JUM class.
+     * We call back on this to get important information about the state.
+     *
+     * @param jum
+     */
+
     public void setJUM(JUM jum){
         this.jum = jum;
     }
+
+
+    /**
+     * Clears the buffered image, readying it for painting.
+     * @param g
+     */
 
     private void clearImageBuff(Graphics2D g){
         g.setComposite(AlphaComposite.Clear);
@@ -87,6 +117,13 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
         g.setComposite(AlphaComposite.SrcOver);
     }
 
+    /**
+     * Our paint override that does the actual drawing.
+     * First we call super method then we grab the buffered image graphics.
+     * Before actually drawing the buffered image is cleared using clearImageBuff(g2);
+     *
+     * @param g
+     */
 
     @Override
     public void paintComponent(Graphics g){
@@ -106,6 +143,13 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
         g.drawImage(buffImage, 0, 0, null);
 
     }
+
+    /**
+     * Returns a color to draw the electrons depending on which sub-shell they are in.
+     *
+     * @param subshell
+     * @return
+     */
 
     public Color subShellColor(int subshell){
         switch(subshell){
@@ -127,14 +171,23 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
         }
     }
 
+    /**
+     * Gives us a point [X,Y] to draw the current electron.
+     * This divides a circle into equal pieces then chooses
+     * the right spot based on the current index.
+     *
+     * @param r
+     * @param h
+     * @param k
+     * @param index
+     * @param count
+     * @return
+     */
+
     public Point getElectronPoint(int r, int h, int k, int index, int count){
-        //double x = r*cos(t) + h;
-        //double y = r*sin(t) + k;
 
+        //Degrees to radians conversion
         double t = ((360 / count) * index ) * (Math.PI / 180);
-
-        //int x = (int)(r * Math.cos(t) + h);
-        //int y = (int)(r * Math.sin(t) + k);
 
         int x = (int)(h + (r * Math.cos(t)));
         int y = (int)(k + (r * Math.sin(t)));
@@ -143,10 +196,11 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
     }
 
     /**
-     *
-     * @param g
      * Draws our atom selector if we have atoms present.
      * Handles drawing next and previous buttons, and the atoms in the selector.
+     *
+     * @param g
+     *
      */
     private void drawAtomSelector(Graphics2D g){
         ArrayList<Atom> atoms = jum.getAtoms();
@@ -179,11 +233,11 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
 
             drawX = ((drawingIndex % (SELECTOR_COUNT / 2)) * SELECTOR_MARGIN) + SELECTOR_STARTX;
             drawY = ((drawingIndex / (SELECTOR_COUNT / 2)) * SELECTOR_MARGIN) + SELECTOR_STARTY;
-            Shape s = new Ellipse2D.Double(drawX,drawY,30,30);
+            Shape s = new Ellipse2D.Double(drawX, drawY, 30, 30);
             g.fill(s);
 
             g.setColor(Color.WHITE);
-            //Label JUM.Atom.JUM.Atom
+            //Label com.livinglifez.atom.com.livinglifez.atom
             g.drawString(a.getName().substring(0, a.getName().length() > 1 ? 2 : 1), drawX + 8, drawY + 18);
 
             drawingIndex++;
@@ -198,10 +252,10 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
             g.setColor(Color.lightGray);
 
             //Back button
-            g.fillRoundRect(SELECTOR_STARTX, drawY + SELECTOR_MARGIN + 8, 40,24, 8,8);
+            g.fillRoundRect(SELECTOR_STARTX, drawY + SELECTOR_MARGIN + 8, 40, 24, 8, 8);
             g.setColor(Color.black);
-            g.drawString("BACK",SELECTOR_STARTX + 4,drawY + SELECTOR_MARGIN + 24);
-            backButton.setLocation(SELECTOR_STARTX,drawY + SELECTOR_MARGIN + 8);
+            g.drawString("BACK", SELECTOR_STARTX + 4, drawY + SELECTOR_MARGIN + 24);
+            backButton.setLocation(SELECTOR_STARTX, drawY + SELECTOR_MARGIN + 8);
 
             buttonXOffset = 48;
             hasBack = true;
@@ -215,10 +269,10 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
             g.setColor(Color.lightGray);
 
             //Next button
-            g.fillRoundRect(SELECTOR_STARTX + buttonXOffset, drawY + SELECTOR_MARGIN + 8, 40,24, 8,8);
+            g.fillRoundRect(SELECTOR_STARTX + buttonXOffset, drawY + SELECTOR_MARGIN + 8, 40, 24, 8, 8);
             g.setColor(Color.black);
-            g.drawString("NEXT",SELECTOR_STARTX + buttonXOffset + 4,drawY + SELECTOR_MARGIN + 24);
-            nextButton.setLocation(SELECTOR_STARTX + buttonXOffset,drawY + SELECTOR_MARGIN + 8);
+            g.drawString("NEXT",SELECTOR_STARTX + buttonXOffset + 4, drawY + SELECTOR_MARGIN + 24);
+            nextButton.setLocation(SELECTOR_STARTX + buttonXOffset, drawY + SELECTOR_MARGIN + 8);
 
             hasNext = true;
         }else{
@@ -228,6 +282,15 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
         g.setColor(prev);
 
     }
+
+    /**
+     * Responsible for drawing the currently selected atom.
+     * This will draw the nucleus electron shells, and electrons.
+     * This will also draw the atoms information in the top left panel,
+     * as well as draw the electron configuration.
+     *
+     * @param g
+     */
 
     private void drawAtoms(Graphics2D g){
 
@@ -284,7 +347,7 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
                 shellX = (getWidth() - (shell_radius * 2)) / 2;
                 shellY = (getHeight() - (shell_radius * 2)) / 2;
 
-                Shape shellShape = new Ellipse2D.Double(shellX, shellY,shell_radius * 2,shell_radius * 2);
+                Shape shellShape = new Ellipse2D.Double(shellX, shellY, shell_radius * 2, shell_radius * 2);
                 g.draw(shellShape);
 
                 int subshellIndex = 0;
@@ -321,9 +384,9 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
             String conf = "";
 
             if(atom.isStabilized())
-                conf = "JUM.Particles.Electron Configuration(U): " + atom.getShells().getElectronConfigurationU();
+                conf = "Electron Configuration(U): " + atom.getShells().getElectronConfigurationU();
             else
-                conf = "JUM.Particles.Electron Configuration: " + atom.getShells().getElectronConfiguration();
+                conf = "Electron Configuration: " + atom.getShells().getElectronConfiguration();
 
             int stringWidth = g.getFontMetrics().stringWidth(conf);
 
@@ -331,7 +394,7 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
             g.drawString(conf, shellX + (((shell_radius*2) - (stringWidth)) / 2), shellY + (shell_radius * 2));
 
             g.setColor(Color.white);
-            g.drawString(atom.getName(), 10,20);
+            g.drawString(atom.getName(), 10, 20);
             g.drawString("Mass (AMU): " + String.valueOf(atom.getMass()),10,40);
 
             g.drawString("Protons: " + String.valueOf(atom.getProtons().size()), 10, 60);
@@ -347,6 +410,12 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
 
 
     }
+
+    /**
+     * Draws the legend for the sub-shells,
+     * {s, p, d, f}
+     * @param g
+     */
 
     private void drawKey(Graphics2D g){
 
@@ -365,7 +434,7 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
             Shape keySphere = new Ellipse2D.Double(keySphereX, keySphereY, 24, 24);
             g.fill(keySphere);
 
-            g.drawString(String.valueOf(subshells[i]),keySphereX + 32,keySphereY + 18);
+            g.drawString(String.valueOf(subshells[i]), keySphereX + 32, keySphereY + 18);
 
             keySphereY += 28;
         }
@@ -385,13 +454,13 @@ public class JUMPanel extends JPanel implements ActionListener, MouseListener {
     Rectangle mouse = new Rectangle(e.getX(), e.getY(), 2,2);
 
         if(hasBack){
-            if(mouse.intersects(new Rectangle((int)backButton.getX(),(int)backButton.getY(),40,24))) {
+            if(mouse.intersects(new Rectangle((int)backButton.getX(),(int)backButton.getY(), 40, 24))) {
                 selectorIndex--;
             }
         }
 
         if(hasNext){
-            if(mouse.intersects(new Rectangle((int)nextButton.getX(),(int)nextButton.getY(),40,24))) {
+            if(mouse.intersects(new Rectangle((int)nextButton.getX(),(int)nextButton.getY(), 40, 24))) {
                 selectorIndex++;
             }
         }
